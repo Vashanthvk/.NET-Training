@@ -1,18 +1,13 @@
 
 using System;
 using System.Collections.Generic;
-
-class Employee
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Department { get; set; }
-    public decimal Salary { get; set; }
-}
+using EmployeeDepartmentManagement.Models;
+using EmployeeDepartmentManagement.Models.Interfaces;
+using EmployeeDepartmentManagement.Models.Services;
 
 class Program
 {
-    static List<Employee> employees = new List<Employee>();
+    static IEmployeeService employeeService = new EmployeeService();
 
     static void Main()
     {
@@ -25,13 +20,12 @@ class Program
             Console.WriteLine("2. View Employees");
             Console.WriteLine("3. Search Employee");
             Console.WriteLine("4. Calculate Salary");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("5. Update Employee Salary");
+            Console.WriteLine("6. Exit");
 
             Console.Write("Enter choice: ");
 
-            string? input = Console.ReadLine();
-
-            if (!int.TryParse(input, out int choice))
+            if (!int.TryParse(Console.ReadLine(), out int choice))
             {
                 Console.WriteLine("Enter a valid number.");
                 continue;
@@ -56,6 +50,10 @@ class Program
                     break;
 
                 case 5:
+                    UpdateEmployeeSalary();
+                    break;
+
+                case 6:
                     isRunning = false;
                     Console.WriteLine("Application closed.");
                     break;
@@ -67,6 +65,7 @@ class Program
         }
     }
 
+    // Add Employee
     static void AddEmployee()
     {
         Console.Write("Enter ID: ");
@@ -77,7 +76,7 @@ class Program
             return;
         }
 
-        if (employees.Exists(e => e.Id == id))
+        if (employeeService.GetEmployeeById(id) != null)
         {
             Console.WriteLine("Employee ID already exists.");
             return;
@@ -104,41 +103,54 @@ class Program
         Console.Write("Enter Salary: ");
 
         if (!decimal.TryParse(Console.ReadLine(), out decimal salary)
-            || salary < 0)
+            || salary <= 0)
         {
-            Console.WriteLine("Invalid salary.");
+            Console.WriteLine("Salary must be greater than zero.");
             return;
         }
 
-        Employee employee = new Employee
+        try
         {
-            Id = id,
-            Name = name,
-            Department = department,
-            Salary = salary
-        };
+            Department employeeDepartment = new Department(1, department);
 
-        employees.Add(employee);
+            Employee employee = new Employee(
+                id,
+                name,
+                salary,
+                employeeDepartment
+            );
 
-        Console.WriteLine("Employee added successfully.");
+            employeeService.AddEmployee(employee);
+
+            Console.WriteLine("Employee added successfully.");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
+    // View Employees
     static void ViewEmployees()
     {
+        List<Employee> employees = employeeService.GetAllEmployees();
+
         if (employees.Count == 0)
         {
             Console.WriteLine("No employees found.");
             return;
         }
 
+        Console.WriteLine("\n===== EMPLOYEE DETAILS =====");
+
         foreach (Employee employee in employees)
         {
-            Console.WriteLine(
-                $"{employee.Id} | {employee.Name} | " +
-                $"{employee.Department} | {employee.Salary}");
+            employee.DisplayDetails();
+            Console.WriteLine("----------------------------");
         }
     }
 
+    // Search Employee
     static void SearchEmployee()
     {
         Console.Write("Enter Employee ID: ");
@@ -149,7 +161,7 @@ class Program
             return;
         }
 
-        Employee? employee = employees.Find(e => e.Id == id);
+        Employee? employee = employeeService.GetEmployeeById(id);
 
         if (employee == null)
         {
@@ -157,11 +169,10 @@ class Program
             return;
         }
 
-        Console.WriteLine($"Name: {employee.Name}");
-        Console.WriteLine($"Department: {employee.Department}");
-        Console.WriteLine($"Salary: {employee.Salary}");
+        employee.DisplayDetails();
     }
 
+    // Calculate Salary
     static void CalculateSalary()
     {
         Console.Write("Enter Employee ID: ");
@@ -172,7 +183,7 @@ class Program
             return;
         }
 
-        Employee? employee = employees.Find(e => e.Id == id);
+        Employee? employee = employeeService.GetEmployeeById(id);
 
         if (employee == null)
         {
@@ -181,11 +192,42 @@ class Program
         }
 
         decimal bonus = employee.Salary * 0.10m;
-
         decimal totalSalary = employee.Salary + bonus;
 
         Console.WriteLine($"Basic Salary: {employee.Salary}");
         Console.WriteLine($"Bonus: {bonus}");
         Console.WriteLine($"Total Salary: {totalSalary}");
+    }
+
+    // Update Employee Salary
+    static void UpdateEmployeeSalary()
+    {
+        Console.Write("Enter Employee ID: ");
+
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Invalid Employee ID.");
+            return;
+        }
+
+        Console.Write("Enter New Salary: ");
+
+        if (!decimal.TryParse(Console.ReadLine(), out decimal salary)
+            || salary <= 0)
+        {
+            Console.WriteLine("Salary must be greater than zero.");
+            return;
+        }
+
+        bool updated = employeeService.UpdateEmployeeSalary(id, salary);
+
+        if (updated)
+        {
+            Console.WriteLine("Salary updated successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Employee not found.");
+        }
     }
 }

@@ -1,0 +1,45 @@
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using EmployeeDepartmentManagement.Models.Interfaces;
+
+namespace EmployeeDepartmentManagement.Models.Services;
+
+public class EmployeeService : IEmployeeService
+{
+    private readonly List<Employee> _employees = new();
+
+    public void AddEmployee(Employee employee)
+    {
+        if (_employees.Any(e => e.Id == employee.Id))
+        {
+            throw new InvalidOperationException(
+                "Employee ID already exists.");
+        }
+
+        _employees.Add(employee);
+    }
+
+    public List<Employee> GetAllEmployees()
+    {
+        return _employees.ToList();
+    }
+
+    public Employee? GetEmployeeById(int id)
+    {
+        return _employees.FirstOrDefault(e => e.Id == id);
+    }
+
+    public bool UpdateEmployeeSalary(int id, decimal salary)
+    {
+        Employee? employee = GetEmployeeById(id);
+
+        if (employee == null)
+            return false;
+
+        employee.UpdateSalary(salary);
+
+        return true;
+    }
+}

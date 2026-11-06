@@ -38,7 +38,7 @@ dotnet restore
 dotnet build
 ```
 
-## Week 1
+# Day 1
 
 ## Run the Application
 
@@ -145,3 +145,27 @@ The application checks that:
 | Loops | Repeated menu and employee listing |
 | Nullable types | Handling potentially missing console input and search results |
 | Input handling | Validating user-provided values |
+
+
+
+# Day 2
+
+## UML diagram
+
+![alt text](image-1.png)
+
+## SOLID Principles – Employee Management Project
+
+SOLID represents five object-oriented design principles that make code maintainable, reusable, and extensible.
+
+| Principle | Explanation | Project Example |
+|---|---|---|
+| **S – Single Responsibility Principle (SRP)** | Each class should have one responsibility. | Employee handles employee data; EmployeeService handles employee operations. |
+| **O – Open/Closed Principle (OCP)** | Extend functionality without modifying existing code. | Manager overrides `DisplayDetails()` to add team information. |
+| **L – Liskov Substitution Principle (LSP)** | Child classes should work wherever parent classes are expected. | Manager object can be assigned to an Employee reference. |
+| **I – Interface Segregation Principle (ISP)** | Interfaces should contain only relevant methods. | IEmployeeService defines focused employee operations. |
+| **D – Dependency Inversion Principle (DIP)** | Depend on abstractions rather than concrete classes. | Program uses IEmployeeService instead of depending directly on EmployeeService. |
+
+## Overall Summary
+
+The project applies SOLID principles using classes, inheritance, method overriding, and interfaces to improve code organization, maintainability, and future extensibility.
