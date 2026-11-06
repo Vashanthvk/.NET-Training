@@ -22,6 +22,8 @@ class Program
             Console.WriteLine("4. Calculate Salary");
             Console.WriteLine("5. Update Employee Salary");
             Console.WriteLine("6. Exit");
+            Console.WriteLine("7. Collection Exercises");
+            Console.WriteLine("8. LINQ Exercises");
 
             Console.Write("Enter choice: ");
 
@@ -58,6 +60,13 @@ class Program
                     Console.WriteLine("Application closed.");
                     break;
 
+                case 7:
+                    EmployeeCollectionExercises.Run(employeeService);
+                    break;
+                case 8:
+                    LinqExercises.Run(employeeService);
+                    break;
+                
                 default:
                     Console.WriteLine("Invalid choice.");
                     break;
