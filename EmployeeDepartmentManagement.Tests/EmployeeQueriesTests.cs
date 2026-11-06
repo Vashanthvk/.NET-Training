@@ -118,4 +118,61 @@ public class EmployeeQueriesTests
         // Assert
         Assert.Null(result);
     }
+
+    [Fact]
+    public void GetEmployeesByDepartment_IsCaseInsensitive()
+    {
+        // Arrange
+        var employees = GetTestEmployees();
+
+        // Act
+        var result = EmployeeQueries
+            .GetEmployeesByDepartment(employees, "it")
+            .ToList();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.All(result, employee =>
+            Assert.Equal("IT", employee.Department.Name));
+    }
+
+    [Fact]
+    public void GetEmployeesByDepartment_WithEmptyCollection_ReturnsEmptyResult()
+    {
+        // Arrange
+        var employees = new List<Employee>();
+
+        // Act
+        var result = EmployeeQueries
+            .GetEmployeesByDepartment(employees, "IT")
+            .ToList();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetEmployeesByDepartment_WithNullCollection_ThrowsException()
+    {
+        // Arrange
+        IEnumerable<Employee> employees = null!;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() =>
+            EmployeeQueries.GetEmployeesByDepartment(employees, "IT"));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void GetEmployeesByDepartment_WithInvalidDepartment_ThrowsException(
+        string departmentName)
+    {
+        // Arrange
+        var employees = new List<Employee>();
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() =>
+            EmployeeQueries.GetEmployeesByDepartment(employees, departmentName));
+    }
 }

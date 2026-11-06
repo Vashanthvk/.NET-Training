@@ -348,3 +348,24 @@ Finance:
 Here, n represents the total number of employees.
 
 Note: Grouping complexities assume hash-based grouping. Sorting complexities assume comparison-based sorting.
+
+## Day 4
+
+## Test Cases Execution Log
+
+```text
+Restore complete (0.4s)
+  EmployeeDepartmentManagement.Models net10.0 succeeded (0.2s) → D:\Practice\.NET\Employee_and_department_management\EmployeeDepartmentManagement.Models\bin\Debug\net10.0\EmployeeDepartmentManagement.Models.dll
+  EmployeeDepartmentManagement.Tests net10.0 succeeded (0.4s) → bin\Debug\net10.0\EmployeeDepartmentManagement.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.08]   Discovering: EmployeeDepartmentManagement.Tests
+[xUnit.net 00:00:00.14]   Discovered:  EmployeeDepartmentManagement.Tests
+[xUnit.net 00:00:00.16]   Starting:    EmployeeDepartmentManagement.Tests
+[xUnit.net 00:00:00.24]   Finished:    EmployeeDepartmentManagement.Tests
+  EmployeeDepartmentManagement.Tests test net10.0 succeeded (1.3s)
+```
+
+## Test Cases Execution Log
+
+Test summary: total: 16, failed: 0, succeeded: 16, skipped: 0, duration: 1.3s
+Build succeeded in 2.7s
