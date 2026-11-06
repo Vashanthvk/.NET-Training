@@ -1,5 +1,7 @@
 
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EmployeeDepartmentManagement.Models.Interfaces;
 
@@ -12,4 +14,7 @@ public interface IEmployeeService
     Employee? GetEmployeeById(int id);
 
     bool UpdateEmployeeSalary(int id, decimal salary);
+
+    Task<List<Employee>> GetAllEmployeesAsync(
+    CancellationToken cancellationToken = default);
 }

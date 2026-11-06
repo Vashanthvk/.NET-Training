@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EmployeeDepartmentManagement.Models.Interfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EmployeeDepartmentManagement.Models.Services;
 
@@ -41,5 +43,16 @@ public class EmployeeService : IEmployeeService
         employee.UpdateSalary(salary);
 
         return true;
+    }
+
+    public async Task<List<Employee>> GetAllEmployeesAsync(
+    CancellationToken cancellationToken = default)
+    {
+        // Simulate asynchronous work
+        await Task.Delay(100, cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return _employees.ToList();
     }
 }
